@@ -109,7 +109,7 @@
 </div>
 
 <script>
-const BLISTER_START = new Date(2026, 3, 24);
+const BLISTER_START = new Date(2026, 3, 27);
 const CLIENT_ID = '968923854375-pm9n9o9sebidc61taalfiodmnsjrvdgh.apps.googleusercontent.com';
 const SCOPES = 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file';
 const FILE_NAME = 'tracker_ciclo_romina_v2.json';
@@ -278,23 +278,23 @@ function renderHoy() {
     <div class="card">
       <div class="section-title">Registrar hoy</div>
       <div class="lbl">Energía</div>
-      <div class="icon-row">
-        ${[1,2,3,4,5].map(n=>`<button class="score-btn${selEnergy==n?' sel':''}" onclick="pick('energy',${n})">${n}</button>`).join('')}
+      <div class="icon-row" id="row-energy">
+        ${[1,2,3,4,5].map(n=>`<button class="score-btn${selEnergy==n?' sel':''}" data-type="energy" data-val="${n}">${n}</button>`).join('')}
         <span class="score-hint">1=baja · 5=alta</span>
       </div>
       <div class="lbl">Antojo de dulce</div>
-      <div class="icon-row">
-        ${[1,2,3,4,5].map(n=>`<button class="score-btn${selAntojo==n?' sel':''}" onclick="pick('antojo',${n})">${n}</button>`).join('')}
+      <div class="icon-row" id="row-antojo">
+        ${[1,2,3,4,5].map(n=>`<button class="score-btn${selAntojo==n?' sel':''}" data-type="antojo" data-val="${n}">${n}</button>`).join('')}
         <span class="score-hint">1=sin antojo · 5=mucho</span>
       </div>
       <div class="lbl">Estado de ánimo</div>
-      <div class="icon-row">
-        ${[1,2,3,4,5].map(n=>`<button class="score-btn${selMood==n?' sel':''}" onclick="pick('mood',${n})">${n}</button>`).join('')}
+      <div class="icon-row" id="row-mood">
+        ${[1,2,3,4,5].map(n=>`<button class="score-btn${selMood==n?' sel':''}" data-type="mood" data-val="${n}">${n}</button>`).join('')}
         <span class="score-hint">1=bajo · 5=genial</span>
       </div>
       <div class="lbl">Nota</div>
       <textarea id="nota-input" rows="3" placeholder="¿Cómo te sentiste? ¿Comiste según el plan? ¿Entrenaste?">${ex.nota||''}</textarea>
-      <button class="save-btn" onclick="saveDay('${key}')">Guardar</button>
+      <button class="save-btn" id="save-day-btn" data-key="${key}">Guardar</button>
     </div>`;
 }
 
@@ -417,6 +417,23 @@ function buildAuthUrl() {
   });
   return 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
 }
+
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('[data-type]');
+  if (btn) {
+    const type = btn.dataset.type;
+    const val = parseInt(btn.dataset.val);
+    if (type==='energy') selEnergy=val;
+    if (type==='antojo') selAntojo=val;
+    if (type==='mood') selMood=val;
+    renderHoy();
+    return;
+  }
+  const saveBtn = e.target.closest('#save-day-btn');
+  if (saveBtn) {
+    saveDay(saveBtn.dataset.key);
+  }
+});
 
 loadLocal();
 initGoogleAuth();
