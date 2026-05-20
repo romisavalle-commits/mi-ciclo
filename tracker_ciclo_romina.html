@@ -8,28 +8,30 @@
 <title>Mi Ciclo</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, sans-serif; background: #fff; color: #1a1a18; font-size: 15px; max-width: 430px; margin: 0 auto; }
-.topbar { padding: 14px 16px 10px; border-bottom: 1px solid #eee; }
+body { font-family: -apple-system, sans-serif; background: #f7f7f5; color: #1a1a18; font-size: 15px; max-width: 430px; margin: 0 auto; }
+.topbar { padding: 14px 16px 10px; border-bottom: 1px solid #eee; background:#fff; }
 .topbar h1 { font-size: 18px; font-weight: 700; }
 .topbar-sub { font-size: 12px; color: #888; margin-top: 2px; }
 .status { font-size: 11px; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-top: 6px; background: #f0f0ee; color: #666; }
-.nav { display: flex; gap: 8px; padding: 10px 16px; border-bottom: 1px solid #eee; }
-.nav a { padding: 7px 16px; font-size: 13px; font-weight: 500; border: 1px solid #ddd; border-radius: 20px; text-decoration: none; color: #666; }
+.nav { display: flex; gap: 6px; padding: 10px 16px; border-bottom: 1px solid #eee; background:#fff; overflow-x: auto; }
+.nav a { padding: 7px 13px; font-size: 12px; font-weight: 500; border: 1px solid #ddd; border-radius: 20px; text-decoration: none; color: #666; white-space: nowrap; }
 .nav a.active { background: #1a1a18; color: #fff; border-color: #1a1a18; }
 .content { padding: 16px; }
 .fase-card { border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
 .card { background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
-.lbl { font-size: 10px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.06em; margin: 12px 0 8px; }
+.lbl { font-size: 10px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.06em; margin: 12px 0 6px; }
 .tip { font-size: 13px; color: #666; line-height: 1.55; padding: 2px 0 2px 12px; position: relative; }
 .tip::before { content: '·'; position: absolute; left: 0; }
 .score-row { display: flex; gap: 8px; margin: 6px 0 4px; }
-.score-row a { width: 52px; height: 52px; border-radius: 10px; border: 1px solid #ddd; background: #f7f7f5; color: #666; font-size: 20px; font-weight: 700; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+.score-row a { width: 50px; height: 50px; border-radius: 10px; border: 1px solid #ddd; background: #f7f7f5; color: #666; font-size: 18px; font-weight: 700; display: flex; align-items: center; justify-content: center; text-decoration: none; }
 .score-row a.sel { border: 2.5px solid #7F77DD; background: #EEEDFE; color: #3C3489; }
 .hint { font-size: 11px; color: #aaa; margin-bottom: 8px; }
 textarea { width: 100%; font-size: 13px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; background: #f7f7f5; color: #1a1a18; resize: none; font-family: inherit; line-height: 1.5; margin-top: 4px; }
+input[type=number], input[type=text] { width: 100%; font-size: 15px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; background: #f7f7f5; color: #1a1a18; font-family: inherit; margin-top: 4px; }
 .save-btn { display: block; width: 100%; padding: 13px; font-size: 15px; font-weight: 700; border: none; border-radius: 10px; background: #1a1a18; color: #fff; margin-top: 10px; text-align: center; text-decoration: none; cursor: pointer; }
+.export-btn { display: block; width: 100%; padding: 13px; font-size: 15px; font-weight: 700; border: 2px solid #1a1a18; border-radius: 10px; background: #fff; color: #1a1a18; margin-top: 10px; text-align: center; text-decoration: none; cursor: pointer; }
 .pill-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin: 12px 0; }
-.pill { aspect-ratio: 1; border-radius: 50%; border: 1px solid #ddd; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.pill { aspect-ratio: 1; border-radius: 50%; border: 1px solid #ddd; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; position: relative; }
 .pill.today { border: 3px solid #1a1a18; }
 .pill.has-log::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #999; position: absolute; bottom: 1px; right: 1px; }
 .pill.p { background: #F1EFE8; color: #5F5E5A; }
@@ -40,10 +42,21 @@ textarea { width: 100%; font-size: 13px; padding: 10px 12px; border: 1px solid #
 .log-row { padding: 10px 0; border-bottom: 1px solid #eee; }
 .log-date { font-size: 13px; font-weight: 700; }
 .log-fase { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-left: 6px; }
-.log-scores { font-size: 12px; color: #888; margin-top: 4px; display: flex; gap: 12px; }
-.log-nota { font-size: 12px; color: #aaa; margin-top: 3px; }
+.log-scores { font-size: 12px; color: #888; margin-top: 3px; display: flex; gap: 10px; flex-wrap: wrap; }
+.log-nota { font-size: 12px; color: #aaa; margin-top: 2px; }
 .screen { display: none; }
 .screen.active { display: block; }
+.peso-row { display: flex; gap: 8px; align-items: center; }
+.peso-row input { flex: 1; }
+.peso-add-btn { padding: 10px 16px; border: 1px solid #ddd; border-radius: 10px; background: #f7f7f5; color: #1a1a18; font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; margin-top: 4px; }
+.peso-hist { margin-top: 10px; }
+.peso-item { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid #eee; color: #555; }
+.peso-item span:first-child { color: #aaa; }
+.peso-item strong { color: #1a1a18; }
+.check-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 6px 0; }
+.check-btn { padding: 8px 14px; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; text-decoration: none; color: #666; background: #f7f7f5; }
+.check-btn.sel { border-color: #27500A; background: #EAF3DE; color: #27500A; font-weight: 600; }
+.section-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
 </style>
 </head>
 <body>
@@ -55,19 +68,24 @@ textarea { width: 100%; font-size: 13px; padding: 10px 12px; border: 1px solid #
 </div>
 
 <div class="nav">
-  <a href="#hoy" class="active" id="nav-hoy" onclick="setScreen('hoy');return false;">Hoy</a>
-  <a href="#ciclo" id="nav-ciclo" onclick="setScreen('ciclo');return false;">Ciclo</a>
-  <a href="#hist" id="nav-hist" onclick="setScreen('hist');return false;">Historial</a>
+  <a href="#" id="nav-hoy" onclick="setScreen('hoy');return false;" class="active">Hoy</a>
+  <a href="#" id="nav-comidas" onclick="setScreen('comidas');return false;">Comidas</a>
+  <a href="#" id="nav-ejercicio" onclick="setScreen('ejercicio');return false;">Ejercicio</a>
+  <a href="#" id="nav-peso" onclick="setScreen('peso');return false;">Peso</a>
+  <a href="#" id="nav-ciclo" onclick="setScreen('ciclo');return false;">Ciclo</a>
+  <a href="#" id="nav-hist" onclick="setScreen('hist');return false;">Historial</a>
 </div>
 
 <div class="content">
   <div id="screen-hoy" class="screen active"></div>
+  <div id="screen-comidas" class="screen"></div>
+  <div id="screen-ejercicio" class="screen"></div>
+  <div id="screen-peso" class="screen"></div>
   <div id="screen-ciclo" class="screen"></div>
   <div id="screen-hist" class="screen"></div>
 </div>
 
 <script>
-// Fecha inicio blíster activo — día 1 = 27 abril 2026
 var Y=2026, M=3, D=26;
 
 var TIPS = {
@@ -90,154 +108,348 @@ var TIPS = {
 };
 
 var logs = {};
+var pesos = [];
 try { logs = JSON.parse(localStorage.getItem('ciclo_v3') || '{}'); } catch(e) {}
+try { pesos = JSON.parse(localStorage.getItem('ciclo_pesos') || '[]'); } catch(e) {}
 
-function getDay() {
-  var now = new Date();
-  var start = new Date(Y, M, D);
-  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+function save() { localStorage.setItem('ciclo_v3', JSON.stringify(logs)); }
+function savePesos() { localStorage.setItem('ciclo_pesos', JSON.stringify(pesos)); }
+
+function getDay(date) {
+  var d = date || new Date();
+  var start = new Date(Y,M,D);
+  var today = new Date(d.getFullYear(), d.getMonth(), d.getDate());
   var diff = Math.round((today - start) / 86400000);
-  return ((diff % 28) + 28) % 28 + 1;
+  return ((diff%28)+28)%28+1;
 }
 
 function getFase(day) {
-  if (day <= 4)  return {cls:'p',  color:'#633806', bg:'#FAEEDA', fase:'descenso',    label:'Descenso · placebo'};
-  if (day <= 10) return {cls:'f1', color:'#633806', bg:'#FAEEDA', fase:'recuperacion',label:'Recuperación · días 5–10'};
-  if (day <= 18) return {cls:'f2', color:'#27500A', bg:'#EAF3DE', fase:'pico',        label:'Pico de energía · días 11–18'};
-  if (day <= 24) return {cls:'f3', color:'#085041', bg:'#E1F5EE', fase:'bajando',     label:'Estabilidad bajando · días 19–24'};
-  return              {cls:'f4', color:'#72243E', bg:'#FBEAF0', fase:'descenso',    label:'Descenso · días 25–28'};
+  if (day<=4)  return {cls:'p',  color:'#633806',bg:'#FAEEDA',fase:'descenso',    label:'Descenso · placebo'};
+  if (day<=10) return {cls:'f1', color:'#633806',bg:'#FAEEDA',fase:'recuperacion',label:'Recuperación · días 5–10'};
+  if (day<=18) return {cls:'f2', color:'#27500A',bg:'#EAF3DE',fase:'pico',        label:'Pico de energía · días 11–18'};
+  if (day<=24) return {cls:'f3', color:'#085041',bg:'#E1F5EE',fase:'bajando',     label:'Estabilidad bajando · días 19–24'};
+  return            {cls:'f4', color:'#72243E',bg:'#FBEAF0',fase:'descenso',    label:'Descenso · días 25–28'};
 }
 
 function todayKey() {
-  var n = new Date();
+  var n=new Date();
   return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');
 }
 
-function saveLog() {
-  var nota = document.getElementById('nota-input');
-  var key = todayKey();
-  if (!logs[key]) logs[key] = {};
-  logs[key].nota = nota ? nota.value : '';
-  localStorage.setItem('ciclo_v3', JSON.stringify(logs));
-  document.getElementById('status-bar').textContent = 'Guardado';
-  setTimeout(function(){ document.getElementById('status-bar').textContent = 'Guardado local'; }, 1500);
+function setStatus(msg) {
+  var el=document.getElementById('status-bar');
+  if(el) el.textContent=msg;
 }
 
-function pickScore(type, val) {
-  var key = todayKey();
-  if (!logs[key]) logs[key] = {};
-  logs[key][type] = val;
-  localStorage.setItem('ciclo_v3', JSON.stringify(logs));
+function pickScore(type,val) {
+  var key=todayKey();
+  if(!logs[key]) logs[key]={};
+  logs[key][type]=val;
+  save();
   renderHoy();
 }
 
+function saveLog() {
+  var key=todayKey();
+  if(!logs[key]) logs[key]={};
+  var n=document.getElementById('nota-input');
+  if(n) logs[key].nota=n.value;
+  save();
+  setStatus('Guardado');
+  setTimeout(function(){setStatus('Guardado local');},1500);
+}
+
+function saveComidas() {
+  var key=todayKey();
+  if(!logs[key]) logs[key]={};
+  ['almuerzo','merienda','cena'].forEach(function(t){
+    var el=document.getElementById('txt-'+t);
+    if(el) logs[key][t]=el.value;
+  });
+  var hidEl=document.getElementById('hidratos-sel');
+  if(hidEl) logs[key].hidratos=hidEl.dataset.val;
+  save();
+  setStatus('Comidas guardadas');
+  setTimeout(function(){setStatus('Guardado local');},1500);
+}
+
+function toggleHidratos(val) {
+  var el=document.getElementById('hidratos-sel');
+  if(!el) return;
+  var cur=el.dataset.val;
+  el.dataset.val = cur===val ? '' : val;
+  renderHidratosBtns();
+}
+
+function renderHidratosBtns() {
+  var el=document.getElementById('hidratos-sel');
+  var val=el?el.dataset.val:'';
+  ['almuerzo','cena'].forEach(function(op){
+    var btn=document.getElementById('hid-btn-'+op);
+    if(btn) btn.className='check-btn'+(val===op?' sel':'');
+  });
+}
+
+function saveEjercicio() {
+  var key=todayKey();
+  if(!logs[key]) logs[key]={};
+  var tipo=document.getElementById('eje-tipo');
+  var dur=document.getElementById('eje-dur');
+  var int=document.getElementById('eje-int');
+  if(tipo) logs[key].ejeTipo=tipo.value;
+  if(dur) logs[key].ejeDur=dur.value;
+  if(int) logs[key].ejeInt=int.dataset.val;
+  save();
+  setStatus('Ejercicio guardado');
+  setTimeout(function(){setStatus('Guardado local');},1500);
+}
+
+function toggleInt(val) {
+  var el=document.getElementById('int-sel');
+  if(!el) return;
+  el.dataset.val=val;
+  ['suave','moderada','intensa'].forEach(function(op){
+    var btn=document.getElementById('int-btn-'+op);
+    if(btn) btn.className='check-btn'+(val===op?' sel':'');
+  });
+}
+
+function addPeso() {
+  var el=document.getElementById('peso-input');
+  if(!el||!el.value) return;
+  var val=parseFloat(el.value);
+  if(isNaN(val)) return;
+  var key=todayKey();
+  pesos.push({fecha:key,peso:val});
+  pesos.sort(function(a,b){return a.fecha.localeCompare(b.fecha);});
+  savePesos();
+  el.value='';
+  renderPeso();
+}
+
+function exportar() {
+  var lines = ['REGISTRO MI CICLO — ROMINA VALLE\n'];
+  lines.push('=== BIENESTAR ===');
+  var bKeys=Object.keys(logs).sort().reverse().slice(0,28);
+  bKeys.forEach(function(k){
+    var l=logs[k];
+    var d=new Date(k+'T12:00:00');
+    var day=getDay(d);
+    var fi=getFase(day);
+    var dateStr=d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
+    lines.push('\n'+dateStr+' (Día '+day+' — '+fi.label+')');
+    if(l.energy||l.antojo||l.mood) lines.push('  Energía: '+(l.energy||'-')+'/5 | Antojo: '+(l.antojo||'-')+'/5 | Ánimo: '+(l.mood||'-')+'/5');
+    if(l.almuerzo) lines.push('  Almuerzo: '+l.almuerzo);
+    if(l.merienda) lines.push('  Merienda: '+l.merienda);
+    if(l.cena) lines.push('  Cena: '+l.cena);
+    if(l.hidratos) lines.push('  Hidratos en: '+l.hidratos);
+    if(l.ejeTipo) lines.push('  Ejercicio: '+l.ejeTipo+(l.ejeDur?' — '+l.ejeDur+' min':'')+(l.ejeInt?' — intensidad: '+l.ejeInt:''));
+    if(l.nota) lines.push('  Nota: '+l.nota);
+  });
+  if(pesos.length) {
+    lines.push('\n=== PESO ===');
+    pesos.slice().reverse().forEach(function(p){
+      var d=new Date(p.fecha+'T12:00:00');
+      lines.push(d.toLocaleDateString('es-AR',{day:'numeric',month:'long',year:'numeric'})+': '+p.peso+' kg');
+    });
+  }
+  var blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url; a.download='registro_romina.txt';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 function renderHoy() {
-  var day = getDay();
-  var fi = getFase(day);
-  var tips = TIPS[fi.fase];
-  var key = todayKey();
-  var ex = logs[key] || {};
-  var daysLeft = 29 - day;
+  var day=getDay();
+  var fi=getFase(day);
+  var tips=TIPS[fi.fase];
+  var key=todayKey();
+  var ex=logs[key]||{};
+  var daysLeft=29-day;
+  document.getElementById('topbar-sub').textContent='Día '+day+' · '+fi.label.split('·')[0].trim();
 
-  document.getElementById('topbar-sub').textContent = 'Día ' + day + ' · ' + fi.label.split('·')[0].trim();
-
-  function scoreRow(type, val) {
-    var html = '<div class="score-row">';
-    for (var i=1; i<=5; i++) {
-      var sel = ex[type]==i ? ' sel' : '';
-      html += '<a href="javascript:void(0)" class="score-btn'+sel+'" onclick="pickScore(\''+type+'\','+i+');return false;">'+i+'</a>';
+  function scoreRow(type) {
+    var html='<div class="score-row">';
+    for(var i=1;i<=5;i++){
+      var sel=ex[type]==i?' sel':'';
+      html+='<a href="javascript:void(0)" class="'+sel+'" onclick="pickScore(\''+type+'\','+i+');return false;">'+i+'</a>';
     }
-    html += '</div>';
-    return html;
+    return html+'</div>';
   }
 
-  var html = '<div class="fase-card" style="background:'+fi.bg+';">'
-    + '<div style="font-size:28px;font-weight:800;color:'+fi.color+';">Día '+day+'</div>'
-    + '<div style="font-size:13px;font-weight:600;color:'+fi.color+';margin-top:2px;">'+fi.label+'</div>'
-    + '<div style="font-size:12px;color:'+fi.color+';opacity:0.7;margin-top:2px;">'+daysLeft+' días para el próximo blíster</div>'
-    + '</div>'
-    + '<div class="card">'
-    + '<div style="font-size:15px;font-weight:700;margin-bottom:8px;">Alimentación hoy</div>'
-    + tips.ali.map(function(t){return '<div class="tip">'+t+'</div>';}).join('')
-    + '<div class="lbl" style="margin-top:12px;">Ejercicio hoy</div>'
-    + tips.eje.map(function(t){return '<div class="tip">'+t+'</div>';}).join('')
-    + '</div>'
-    + '<div class="card">'
-    + '<div style="font-size:15px;font-weight:700;margin-bottom:4px;">Registrar hoy</div>'
-    + '<div class="lbl">Energía</div>'
-    + scoreRow('energy') + '<div class="hint">1=baja · 5=alta</div>'
-    + '<div class="lbl">Antojo de dulce</div>'
-    + scoreRow('antojo') + '<div class="hint">1=sin antojo · 5=mucho</div>'
-    + '<div class="lbl">Estado de ánimo</div>'
-    + scoreRow('mood') + '<div class="hint">1=bajo · 5=genial</div>'
-    + '<div class="lbl">Nota</div>'
-    + '<textarea id="nota-input" rows="3" placeholder="¿Cómo te sentiste? ¿Entrenaste? ¿Comiste según el plan?">'+(ex.nota||'')+'</textarea>'
-    + '<a href="javascript:void(0)" class="save-btn" onclick="saveLog();return false;">Guardar</a>'
-    + '</div>';
+  document.getElementById('screen-hoy').innerHTML=
+    '<div class="fase-card" style="background:'+fi.bg+';">'
+    +'<div style="font-size:28px;font-weight:800;color:'+fi.color+';">Día '+day+'</div>'
+    +'<div style="font-size:13px;font-weight:600;color:'+fi.color+';margin-top:2px;">'+fi.label+'</div>'
+    +'<div style="font-size:12px;color:'+fi.color+';opacity:0.7;margin-top:2px;">'+daysLeft+' días para el próximo blíster</div>'
+    +'</div>'
+    +'<div class="card">'
+    +'<div class="section-title">Alimentación hoy</div>'
+    +tips.ali.map(function(t){return '<div class="tip">'+t+'</div>';}).join('')
+    +'<div class="lbl" style="margin-top:12px;">Ejercicio hoy</div>'
+    +tips.eje.map(function(t){return '<div class="tip">'+t+'</div>';}).join('')
+    +'</div>'
+    +'<div class="card">'
+    +'<div class="section-title">Registrar hoy</div>'
+    +'<div class="lbl">Energía</div>'+scoreRow('energy')+'<div class="hint">1=baja · 5=alta</div>'
+    +'<div class="lbl">Antojo de dulce</div>'+scoreRow('antojo')+'<div class="hint">1=sin antojo · 5=mucho</div>'
+    +'<div class="lbl">Estado de ánimo</div>'+scoreRow('mood')+'<div class="hint">1=bajo · 5=genial</div>'
+    +'<div class="lbl">Nota del día</div>'
+    +'<textarea id="nota-input" rows="2" placeholder="¿Cómo te sentiste?">'+(ex.nota||'')+'</textarea>'
+    +'<a href="javascript:void(0)" class="save-btn" onclick="saveLog();return false;">Guardar</a>'
+    +'</div>';
+}
 
-  document.getElementById('screen-hoy').innerHTML = html;
+function renderComidas() {
+  var key=todayKey();
+  var ex=logs[key]||{};
+  var hid=ex.hidratos||'';
+  document.getElementById('screen-comidas').innerHTML=
+    '<div class="card">'
+    +'<div class="section-title">Comidas de hoy</div>'
+    +'<div class="lbl">Almuerzo</div>'
+    +'<textarea id="txt-almuerzo" rows="2" placeholder="Ej: pollo a la plancha, ensalada, arroz integral">'+(ex.almuerzo||'')+'</textarea>'
+    +'<div class="lbl">Merienda</div>'
+    +'<textarea id="txt-merienda" rows="2" placeholder="Ej: yogur griego con fruta">'+(ex.merienda||'')+'</textarea>'
+    +'<div class="lbl">Cena</div>'
+    +'<textarea id="txt-cena" rows="2" placeholder="Ej: merluza al horno, vegetales salteados">'+(ex.cena||'')+'</textarea>'
+    +'<div class="lbl">¿En qué comida pusiste los hidratos?</div>'
+    +'<div class="check-row" id="hidratos-sel" data-val="'+hid+'">'
+    +'<a href="javascript:void(0)" class="check-btn'+(hid==='almuerzo'?' sel':'')+'" id="hid-btn-almuerzo" onclick="toggleHidratos(\'almuerzo\');return false;">Almuerzo</a>'
+    +'<a href="javascript:void(0)" class="check-btn'+(hid==='cena'?' sel':'')+'" id="hid-btn-cena" onclick="toggleHidratos(\'cena\');return false;">Cena</a>'
+    +'<a href="javascript:void(0)" class="check-btn'+(hid==='ninguna'?' sel':'')+'" id="hid-btn-ninguna" onclick="toggleHidratos(\'ninguna\');return false;">No puse</a>'
+    +'</div>'
+    +'<a href="javascript:void(0)" class="save-btn" onclick="saveComidas();return false;">Guardar comidas</a>'
+    +'</div>';
+}
+
+function renderEjercicio() {
+  var key=todayKey();
+  var ex=logs[key]||{};
+  var int=ex.ejeInt||'';
+  document.getElementById('screen-ejercicio').innerHTML=
+    '<div class="card">'
+    +'<div class="section-title">Ejercicio de hoy</div>'
+    +'<div class="lbl">Tipo de ejercicio</div>'
+    +'<input type="text" id="eje-tipo" placeholder="Ej: gym, caminata, yoga, pilates" value="'+(ex.ejeTipo||'')+'"/>'
+    +'<div class="lbl">Duración (minutos)</div>'
+    +'<input type="number" id="eje-dur" placeholder="Ej: 45" value="'+(ex.ejeDur||'')+'"/>'
+    +'<div class="lbl">Intensidad</div>'
+    +'<div class="check-row" id="int-sel" data-val="'+int+'">'
+    +'<a href="javascript:void(0)" class="check-btn'+(int==='suave'?' sel':'')+'" id="int-btn-suave" onclick="toggleInt(\'suave\');return false;">Suave</a>'
+    +'<a href="javascript:void(0)" class="check-btn'+(int==='moderada'?' sel':'')+'" id="int-btn-moderada" onclick="toggleInt(\'moderada\');return false;">Moderada</a>'
+    +'<a href="javascript:void(0)" class="check-btn'+(int==='intensa'?' sel':'')+'" id="int-btn-intensa" onclick="toggleInt(\'intensa\');return false;">Intensa</a>'
+    +'</div>'
+    +'<a href="javascript:void(0)" class="save-btn" onclick="saveEjercicio();return false;">Guardar ejercicio</a>'
+    +'</div>';
+}
+
+function renderPeso() {
+  var ultimos=pesos.slice().reverse().slice(0,10);
+  var pesoHtml='';
+  if(ultimos.length) {
+    pesoHtml='<div class="peso-hist">';
+    ultimos.forEach(function(p){
+      var d=new Date(p.fecha+'T12:00:00');
+      var dateStr=d.toLocaleDateString('es-AR',{day:'numeric',month:'short'});
+      pesoHtml+='<div class="peso-item"><span>'+dateStr+'</span><strong>'+p.peso+' kg</strong></div>';
+    });
+    if(pesos.length>=2) {
+      var diff=(pesos[pesos.length-1].peso - pesos[0].peso).toFixed(1);
+      var color=diff<0?'#27500A':'#993C1D';
+      var sign=diff>0?'+':'';
+      pesoHtml+='<div style="margin-top:10px;font-size:13px;color:'+color+';font-weight:600;">Diferencia total: '+sign+diff+' kg</div>';
+    }
+    pesoHtml+='</div>';
+  }
+  document.getElementById('screen-peso').innerHTML=
+    '<div class="card">'
+    +'<div class="section-title">Registro de peso</div>'
+    +'<div class="lbl">Peso de hoy (kg)</div>'
+    +'<div class="peso-row">'
+    +'<input type="number" id="peso-input" placeholder="Ej: 77.5" step="0.1"/>'
+    +'<a href="javascript:void(0)" class="peso-add-btn" onclick="addPeso();return false;">Agregar</a>'
+    +'</div>'
+    +pesoHtml
+    +'</div>'
+    +'<div class="card">'
+    +'<div class="section-title">Exportar para Virginia</div>'
+    +'<div style="font-size:13px;color:#888;margin-bottom:8px;">Descargá un archivo de texto con todos tus registros de las últimas 4 semanas para llevarle a la nutricionista.</div>'
+    +'<a href="javascript:void(0)" class="export-btn" onclick="exportar();return false;">Descargar registro</a>'
+    +'</div>';
 }
 
 function renderCiclo() {
-  var day = getDay();
-  var html = '<div class="card">'
-    + '<div style="font-size:15px;font-weight:700;margin-bottom:4px;">Tu blíster actual</div>'
-    + '<div style="font-size:12px;color:#888;margin-bottom:10px;">Iniciado el 26 de abril · Hoy día '+day+'</div>'
-    + '<div class="pill-grid">';
-  for (var d=1; d<=28; d++) {
-    var fi = getFase(d);
-    var start = new Date(Y,M,D);
+  var day=getDay();
+  var html='<div class="card">'
+    +'<div class="section-title">Tu blíster actual</div>'
+    +'<div style="font-size:12px;color:#888;margin-bottom:10px;">Iniciado el 26 de abril · Hoy día '+day+'</div>'
+    +'<div class="pill-grid">';
+  for(var d=1;d<=28;d++){
+    var fi=getFase(d);
+    var start=new Date(Y,M,D);
     start.setDate(start.getDate()+d-1);
-    var k = start.getFullYear()+'-'+String(start.getMonth()+1).padStart(2,'0')+'-'+String(start.getDate()).padStart(2,'0');
-    var hasLog = !!logs[k];
-    html += '<div class="pill '+fi.cls+(d==day?' today':'')+(hasLog?' has-log':'')+'" style="position:relative;">'+d+'</div>';
+    var k=start.getFullYear()+'-'+String(start.getMonth()+1).padStart(2,'0')+'-'+String(start.getDate()).padStart(2,'0');
+    var hasLog=!!(logs[k]&&(logs[k].energy||logs[k].almuerzo||logs[k].ejeTipo));
+    html+='<div class="pill '+fi.cls+(d==day?' today':'')+(hasLog?' has-log':'')+'" style="position:relative;">'+d+'</div>';
   }
-  html += '</div>'
-    + '<div style="font-size:11px;color:#aaa;margin-top:8px;">Borde grueso = hoy · Punto = tiene registro</div>'
-    + '</div>';
-  document.getElementById('screen-ciclo').innerHTML = html;
+  html+='</div>'
+    +'<div style="font-size:11px;color:#aaa;margin-top:8px;">Borde grueso = hoy · Punto = tiene registro</div>'
+    +'</div>'
+    +'<div class="card">'
+    +'<div style="font-size:11px;color:#888;display:flex;flex-wrap:wrap;gap:8px;">'
+    +'<span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:50%;background:#FAEEDA;border:1px solid #EF9F27;display:inline-block;"></span>Recuperación</span>'
+    +'<span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:50%;background:#EAF3DE;border:1px solid #97C459;display:inline-block;"></span>Pico</span>'
+    +'<span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:50%;background:#E1F5EE;border:1px solid #5DCAA5;display:inline-block;"></span>Bajando</span>'
+    +'<span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:50%;background:#FBEAF0;border:1px solid #ED93B1;display:inline-block;"></span>Descenso</span>'
+    +'</div></div>';
+  document.getElementById('screen-ciclo').innerHTML=html;
 }
 
 function renderHistorial() {
-  var entries = Object.entries(logs).sort(function(a,b){return b[0].localeCompare(a[0]);}).slice(0,30);
-  var html = '<div class="card">';
-  if (!entries.length) {
-    html += '<p style="font-size:13px;color:#888;">Todavía no hay registros.</p>';
+  var entries=Object.entries(logs).sort(function(a,b){return b[0].localeCompare(a[0]);}).slice(0,28);
+  var html='<div class="card">';
+  if(!entries.length){
+    html+='<p style="font-size:13px;color:#888;">Todavía no hay registros.</p>';
   } else {
-    html += '<div style="font-size:15px;font-weight:700;margin-bottom:8px;">Historial</div>';
-    entries.forEach(function(e) {
-      var key = e[0]; var log = e[1];
-      var d = new Date(key+'T12:00:00');
-      var start = new Date(Y,M,D);
-      var diff = Math.round((new Date(d.getFullYear(),d.getMonth(),d.getDate()) - new Date(start.getFullYear(),start.getMonth(),start.getDate())) / 86400000);
-      var dayN = ((diff%28)+28)%28+1;
-      var fi = getFase(dayN);
-      var dateStr = d.toLocaleDateString('es-AR',{weekday:'short',day:'numeric',month:'short'});
-      html += '<div class="log-row">'
-        + '<div><span class="log-date">'+dateStr+'</span>'
-        + '<span class="log-fase" style="background:'+fi.bg+';color:'+fi.color+';">Día '+dayN+'</span></div>'
-        + '<div class="log-scores">'
-        + '<span>Energía '+(log.energy||'—')+'/5</span>'
-        + '<span>Antojo '+(log.antojo||'—')+'/5</span>'
-        + '<span>Ánimo '+(log.mood||'—')+'/5</span>'
-        + '</div>'
-        + (log.nota ? '<div class="log-nota">'+log.nota.slice(0,100)+(log.nota.length>100?'…':'')+'</div>' : '')
-        + '</div>';
+    html+='<div class="section-title">Historial</div>';
+    entries.forEach(function(e){
+      var key=e[0];var log=e[1];
+      var d=new Date(key+'T12:00:00');
+      var day=getDay(d);
+      var fi=getFase(day);
+      var dateStr=d.toLocaleDateString('es-AR',{weekday:'short',day:'numeric',month:'short'});
+      html+='<div class="log-row">'
+        +'<div><span class="log-date">'+dateStr+'</span>'
+        +'<span class="log-fase" style="background:'+fi.bg+';color:'+fi.color+';">Día '+day+'</span></div>'
+        +'<div class="log-scores">';
+      if(log.energy||log.antojo||log.mood) html+='<span>E:'+( log.energy||'—')+'</span><span>A:'+(log.antojo||'—')+'</span><span>Á:'+(log.mood||'—')+'</span>';
+      if(log.ejeTipo) html+='<span>'+log.ejeTipo+(log.ejeDur?' '+log.ejeDur+'min':'')+'</span>';
+      html+='</div>';
+      if(log.almuerzo) html+='<div class="log-nota">Alm: '+log.almuerzo.slice(0,40)+'</div>';
+      if(log.nota) html+='<div class="log-nota">'+log.nota.slice(0,60)+'</div>';
+      html+='</div>';
     });
   }
-  html += '</div>';
-  document.getElementById('screen-hist').innerHTML = html;
+  html+='</div>';
+  document.getElementById('screen-hist').innerHTML=html;
 }
 
 function setScreen(s) {
-  ['hoy','ciclo','hist'].forEach(function(id) {
-    document.getElementById('screen-'+id).classList.toggle('active', id===s);
-    var btn = document.getElementById('nav-'+id);
-    if (btn) btn.className = id===s ? 'active' : '';
+  ['hoy','comidas','ejercicio','peso','ciclo','hist'].forEach(function(id){
+    document.getElementById('screen-'+id).classList.toggle('active',id===s);
+    var btn=document.getElementById('nav-'+id);
+    if(btn) btn.className=id===s?'active':'';
   });
-  if (s==='hoy') renderHoy();
-  if (s==='ciclo') renderCiclo();
-  if (s==='hist') renderHistorial();
+  if(s==='hoy') renderHoy();
+  if(s==='comidas') renderComidas();
+  if(s==='ejercicio') renderEjercicio();
+  if(s==='peso') renderPeso();
+  if(s==='ciclo') renderCiclo();
+  if(s==='hist') renderHistorial();
 }
 
 renderHoy();
