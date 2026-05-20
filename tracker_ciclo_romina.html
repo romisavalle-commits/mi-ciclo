@@ -68,7 +68,7 @@ textarea { width: 100%; font-size: 13px; padding: 10px 12px; border: 1px solid #
 
 <script>
 // Fecha inicio blíster activo — día 1 = 27 abril 2026
-var Y=2026, M=3, D=27;
+var Y=2026, M=3, D=26;
 
 var TIPS = {
   recuperacion: {
@@ -182,7 +182,7 @@ function renderCiclo() {
   var day = getDay();
   var html = '<div class="card">'
     + '<div style="font-size:15px;font-weight:700;margin-bottom:4px;">Tu blíster actual</div>'
-    + '<div style="font-size:12px;color:#888;margin-bottom:10px;">Iniciado el 27 de abril · Hoy día '+day+'</div>'
+    + '<div style="font-size:12px;color:#888;margin-bottom:10px;">Iniciado el 26 de abril · Hoy día '+day+'</div>'
     + '<div class="pill-grid">';
   for (var d=1; d<=28; d++) {
     var fi = getFase(d);
