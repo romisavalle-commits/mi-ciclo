@@ -110,7 +110,7 @@
 
 <script>
 const BLISTER_START = new Date(2026, 3, 24);
-const CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID';
+const CLIENT_ID = '968923854375-pm9n9o9sebidc61taalfiodmnsjrvdgh.apps.googleusercontent.com';
 const SCOPES = 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file';
 const FILE_NAME = 'tracker_ciclo_romina_v2.json';
 
@@ -410,7 +410,7 @@ async function initGoogleAuth() {
 function buildAuthUrl() {
   const params = new URLSearchParams({
     client_id: CLIENT_ID,
-    redirect_uri: location.href.split('?')[0].split('#')[0],
+    redirect_uri: 'https://romisavalle-commits.github.io/mi-ciclo/tracker_ciclo_romina.html',
     response_type: 'token',
     scope: SCOPES,
     prompt: 'consent'
