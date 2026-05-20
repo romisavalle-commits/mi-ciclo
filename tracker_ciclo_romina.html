@@ -139,9 +139,11 @@ const TIPS = {
 };
 
 function getDayOfCycle(date) {
-  const d = new Date(date); d.setHours(0,0,0,0);
-  const s = new Date(BLISTER_START); s.setHours(0,0,0,0);
-  const diff = Math.floor((d - s) / 86400000);
+  const d = new Date(date);
+  const localD = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const s = BLISTER_START;
+  const localS = new Date(s.getFullYear(), s.getMonth(), s.getDate());
+  const diff = Math.floor((localD - localS) / 86400000);
   return ((diff % 28) + 28) % 28 + 1;
 }
 
@@ -418,9 +420,13 @@ function buildAuthUrl() {
   return 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
 }
 
-document.addEventListener('click', function(e) {
+document.addEventListener('touchend', handleClick, {passive: true});
+document.addEventListener('click', handleClick);
+
+function handleClick(e) {
   const btn = e.target.closest('[data-type]');
   if (btn) {
+    e.preventDefault();
     const type = btn.dataset.type;
     const val = parseInt(btn.dataset.val);
     if (type==='energy') selEnergy=val;
@@ -431,9 +437,10 @@ document.addEventListener('click', function(e) {
   }
   const saveBtn = e.target.closest('#save-day-btn');
   if (saveBtn) {
+    e.preventDefault();
     saveDay(saveBtn.dataset.key);
   }
-});
+}
 
 loadLocal();
 initGoogleAuth();
