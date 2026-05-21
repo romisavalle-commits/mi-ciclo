@@ -8,12 +8,12 @@
 <title>Mi Ciclo</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, sans-serif; background: #f7f7f5; color: #1a1a18; font-size: 15px; max-width: 430px; margin: 0 auto; }
-.topbar { padding: 14px 16px 10px; border-bottom: 1px solid #eee; background:#fff; }
+body { font-family: -apple-system, sans-serif; background: #f7f7f5; color: #1a1a18; font-size: 15px; max-width: 430px; margin: 0 auto; min-height: 100vh; }
+.topbar { padding: 14px 16px 10px; border-bottom: 1px solid #eee; background:#fff; position:sticky; top:0; z-index:10; }
 .topbar h1 { font-size: 18px; font-weight: 700; }
 .topbar-sub { font-size: 12px; color: #888; margin-top: 2px; }
 .status { font-size: 11px; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-top: 6px; background: #f0f0ee; color: #666; }
-.nav { display: flex; gap: 6px; padding: 10px 16px; border-bottom: 1px solid #eee; background:#fff; overflow-x: auto; }
+.nav { display: flex; gap: 6px; padding: 10px 16px; border-bottom: 1px solid #eee; background:#fff; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .nav a { padding: 7px 13px; font-size: 12px; font-weight: 500; border: 1px solid #ddd; border-radius: 20px; text-decoration: none; color: #666; white-space: nowrap; }
 .nav a.active { background: #1a1a18; color: #fff; border-color: #1a1a18; }
 .content { padding: 16px; }
@@ -27,18 +27,23 @@ body { font-family: -apple-system, sans-serif; background: #f7f7f5; color: #1a1a
 .score-row a.sel { border: 2.5px solid #7F77DD; background: #EEEDFE; color: #3C3489; }
 .hint { font-size: 11px; color: #aaa; margin-bottom: 8px; }
 textarea { width: 100%; font-size: 13px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; background: #f7f7f5; color: #1a1a18; resize: none; font-family: inherit; line-height: 1.5; margin-top: 4px; }
-input[type=number], input[type=text] { width: 100%; font-size: 15px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; background: #f7f7f5; color: #1a1a18; font-family: inherit; margin-top: 4px; }
+input[type=number], input[type=text], input[type=date] { width: 100%; font-size: 15px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; background: #f7f7f5; color: #1a1a18; font-family: inherit; margin-top: 4px; }
 .save-btn { display: block; width: 100%; padding: 13px; font-size: 15px; font-weight: 700; border: none; border-radius: 10px; background: #1a1a18; color: #fff; margin-top: 10px; text-align: center; text-decoration: none; cursor: pointer; }
 .export-btn { display: block; width: 100%; padding: 13px; font-size: 15px; font-weight: 700; border: 2px solid #1a1a18; border-radius: 10px; background: #fff; color: #1a1a18; margin-top: 10px; text-align: center; text-decoration: none; cursor: pointer; }
+.danger-btn { display: block; width: 100%; padding: 13px; font-size: 14px; font-weight: 600; border: 1px solid #ddd; border-radius: 10px; background: #fff; color: #993C1D; margin-top: 10px; text-align: center; text-decoration: none; cursor: pointer; }
 .pill-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin: 12px 0; }
 .pill { aspect-ratio: 1; border-radius: 50%; border: 1px solid #ddd; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; position: relative; }
 .pill.today { border: 3px solid #1a1a18; }
 .pill.has-log::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #999; position: absolute; bottom: 1px; right: 1px; }
-.pill.p { background: #F1EFE8; color: #5F5E5A; }
+.pill.p  { background: #F1EFE8; color: #5F5E5A; }
 .pill.f1 { background: #FAEEDA; color: #633806; }
 .pill.f2 { background: #EAF3DE; color: #27500A; }
 .pill.f3 { background: #E1F5EE; color: #085041; }
 .pill.f4 { background: #FBEAF0; color: #72243E; }
+.pill.n1 { background: #FBEAF0; color: #72243E; }
+.pill.n2 { background: #FAEEDA; color: #633806; }
+.pill.n3 { background: #EAF3DE; color: #27500A; }
+.pill.n4 { background: #E1F5EE; color: #085041; }
 .log-row { padding: 10px 0; border-bottom: 1px solid #eee; }
 .log-date { font-size: 13px; font-weight: 700; }
 .log-fase { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-left: 6px; }
@@ -46,49 +51,104 @@ input[type=number], input[type=text] { width: 100%; font-size: 15px; padding: 10
 .log-nota { font-size: 12px; color: #aaa; margin-top: 2px; }
 .screen { display: none; }
 .screen.active { display: block; }
-.peso-row { display: flex; gap: 8px; align-items: center; }
+.peso-row { display: flex; gap: 8px; align-items: flex-end; }
 .peso-row input { flex: 1; }
-.peso-add-btn { padding: 10px 16px; border: 1px solid #ddd; border-radius: 10px; background: #f7f7f5; color: #1a1a18; font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; margin-top: 4px; }
-.peso-hist { margin-top: 10px; }
-.peso-item { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid #eee; color: #555; }
-.peso-item span:first-child { color: #aaa; }
-.peso-item strong { color: #1a1a18; }
+.peso-add-btn { padding: 11px 16px; border: 1px solid #ddd; border-radius: 10px; background: #f7f7f5; color: #1a1a18; font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; display: block; margin-top: 4px; }
+.peso-item { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid #eee; }
 .check-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 6px 0; }
 .check-btn { padding: 8px 14px; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; text-decoration: none; color: #666; background: #f7f7f5; }
 .check-btn.sel { border-color: #27500A; background: #EAF3DE; color: #27500A; font-weight: 600; }
 .section-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.type-btn { display: block; width: 100%; padding: 16px; border: 1px solid #ddd; border-radius: 14px; background: #fff; color: #1a1a18; font-size: 15px; font-weight: 600; text-decoration: none; margin-bottom: 10px; text-align: left; }
+.type-btn.sel { border: 2px solid #7F77DD; background: #EEEDFE; color: #3C3489; }
+.type-btn span { display: block; font-size: 12px; font-weight: 400; color: #888; margin-top: 3px; }
+.onboard { padding: 24px 16px; }
+.onboard h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+.onboard p { font-size: 14px; color: #666; margin-bottom: 20px; line-height: 1.5; }
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <h1>Mi ciclo</h1>
-  <div class="topbar-sub" id="topbar-sub">Cargando...</div>
-  <div class="status" id="status-bar">Guardado local</div>
+<div id="app-topbar" style="display:none;">
+  <div class="topbar">
+    <h1 id="topbar-title">Mi ciclo</h1>
+    <div class="topbar-sub" id="topbar-sub">Cargando...</div>
+    <div class="status" id="status-bar">Guardado local</div>
+  </div>
+  <div class="nav">
+    <a href="#" id="nav-hoy" onclick="setScreen('hoy');return false;" class="active">Hoy</a>
+    <a href="#" id="nav-comidas" onclick="setScreen('comidas');return false;">Comidas</a>
+    <a href="#" id="nav-ejercicio" onclick="setScreen('ejercicio');return false;">Ejercicio</a>
+    <a href="#" id="nav-peso" onclick="setScreen('peso');return false;">Peso</a>
+    <a href="#" id="nav-ciclo" onclick="setScreen('ciclo');return false;">Ciclo</a>
+    <a href="#" id="nav-hist" onclick="setScreen('hist');return false;">Historial</a>
+  </div>
 </div>
 
-<div class="nav">
-  <a href="#" id="nav-hoy" onclick="setScreen('hoy');return false;" class="active">Hoy</a>
-  <a href="#" id="nav-comidas" onclick="setScreen('comidas');return false;">Comidas</a>
-  <a href="#" id="nav-ejercicio" onclick="setScreen('ejercicio');return false;">Ejercicio</a>
-  <a href="#" id="nav-peso" onclick="setScreen('peso');return false;">Peso</a>
-  <a href="#" id="nav-ciclo" onclick="setScreen('ciclo');return false;">Ciclo</a>
-  <a href="#" id="nav-hist" onclick="setScreen('hist');return false;">Historial</a>
+<div id="app-content" style="display:none;">
+  <div class="content">
+    <div id="screen-hoy" class="screen active"></div>
+    <div id="screen-comidas" class="screen"></div>
+    <div id="screen-ejercicio" class="screen"></div>
+    <div id="screen-peso" class="screen"></div>
+    <div id="screen-ciclo" class="screen"></div>
+    <div id="screen-hist" class="screen"></div>
+  </div>
 </div>
 
-<div class="content">
-  <div id="screen-hoy" class="screen active"></div>
-  <div id="screen-comidas" class="screen"></div>
-  <div id="screen-ejercicio" class="screen"></div>
-  <div id="screen-peso" class="screen"></div>
-  <div id="screen-ciclo" class="screen"></div>
-  <div id="screen-hist" class="screen"></div>
+<div id="app-onboard" class="onboard">
+  <h2>Hola 👋</h2>
+  <p>Tu app personal para seguir tu ciclo, energía, alimentación y ejercicio. Primero configuremos tu perfil.</p>
+
+  <div class="card">
+    <div class="lbl">Tu nombre</div>
+    <input type="text" id="ob-nombre" placeholder="Ej: Romina"/>
+
+    <div class="lbl" style="margin-top:16px;">¿Tomás anticonceptivos?</div>
+    <a href="javascript:void(0)" class="type-btn" id="type-ac" onclick="selectType('ac');return false;">
+      Sí, tomo anticonceptivos
+      <span>Calcularemos las fases según tu blíster</span>
+    </a>
+    <a href="javascript:void(0)" class="type-btn" id="type-natural" onclick="selectType('natural');return false;">
+      No, ciclo natural
+      <span>Predeciremos tus fases según tu ciclo</span>
+    </a>
+
+    <div id="ob-ac" style="display:none;">
+      <div class="lbl">Fecha del primer activo de tu blíster actual</div>
+      <input type="date" id="ob-inicio"/>
+      <div class="lbl">Formato del blíster</div>
+      <div class="check-row">
+        <a href="javascript:void(0)" class="check-btn" id="fmt-2404" onclick="selectFmt('24+4');return false;">24+4</a>
+        <a href="javascript:void(0)" class="check-btn" id="fmt-2107" onclick="selectFmt('21+7');return false;">21+7</a>
+        <a href="javascript:void(0)" class="check-btn" id="fmt-2800" onclick="selectFmt('28+0');return false;">28 continuo</a>
+      </div>
+    </div>
+
+    <div id="ob-natural" style="display:none;">
+      <div class="lbl">Fecha de tu última menstruación</div>
+      <input type="date" id="ob-ultima"/>
+      <div class="lbl">Duración de tu ciclo (días)</div>
+      <input type="number" id="ob-duracion" placeholder="Ej: 28" min="21" max="40"/>
+      <div style="font-size:12px;color:#aaa;margin-top:6px;">Si no sabés, dejá 28 que es el promedio.</div>
+    </div>
+
+    <a href="javascript:void(0)" class="save-btn" style="margin-top:20px;" onclick="guardarPerfil();return false;">Empezar</a>
+  </div>
 </div>
 
 <script>
-var Y=2026, M=3, D=26;
+var perfil = null;
+var logs = {};
+var pesos = [];
+var obType = null;
+var obFmt = '24+4';
 
-var TIPS = {
+try { perfil = JSON.parse(localStorage.getItem('ciclo_perfil') || 'null'); } catch(e) {}
+try { logs = JSON.parse(localStorage.getItem('ciclo_v3') || '{}'); } catch(e) {}
+try { pesos = JSON.parse(localStorage.getItem('ciclo_pesos') || '[]'); } catch(e) {}
+
+var TIPS_AC = {
   recuperacion: {
     ali: ['Usá el cuarto de hidratos en el almuerzo (arroz integral, batata o quinoa).','Merienda obligatoria: yogur griego + fruta con cáscara.','Mate con frutos secos para no llegar al almuerzo con hipoglucemia.'],
     eje: ['Movimiento suave: caminata, yoga, elongación.','En gym: fuerza con peso moderado.','Evitar cardio intenso los primeros días.']
@@ -98,37 +158,138 @@ var TIPS = {
     eje: ['Tu mejor semana para entrenar fuerte.','Fuerza con más peso, cardio de mayor intensidad.','Aprovechá para los entrenamientos más exigentes.']
   },
   bajando: {
-    ali: ['Hidratación clave: los 1.5L del plan.','Si aparece antojo: manzana o yogur griego con fruta.','Reservá el cuarto de hidratos para el almuerzo.'],
+    ali: ['Hidratación clave: 1.5L de agua por día.','Si aparece antojo: manzana o yogur griego con fruta.','Reservá los hidratos para el almuerzo.'],
     eje: ['Fuerza moderada, buen cardio.','Buena fase para entrenamientos funcionales.','Mantener el ritmo sin forzar récords.']
   },
   descenso: {
-    ali: ['Usá el cuarto de hidratos sí o sí en el almuerzo.','Merienda obligatoria: yogur griego + fruta con cáscara.','Si el antojo es fuerte, la manzana (colación del plan) está habilitada.'],
-    eje: ['Movimiento suave o descanso activo.','Caminata o elongación si tenés gym programado.','El movimiento suave ayuda a reducir el antojo.']
+    ali: ['Priorizá hidratos complejos en el almuerzo para calmar el antojo.','Merienda obligatoria con proteína + fruta.','Si el antojo es fuerte, fruta o frutos secos.'],
+    eje: ['Movimiento suave o descanso activo.','Caminata o elongación.','El movimiento suave ayuda a reducir el antojo.']
   }
 };
 
-var logs = {};
-var pesos = [];
-try { logs = JSON.parse(localStorage.getItem('ciclo_v3') || '{}'); } catch(e) {}
-try { pesos = JSON.parse(localStorage.getItem('ciclo_pesos') || '[]'); } catch(e) {}
+var TIPS_NAT = {
+  menstrual: {
+    ali: ['Priorizá hierro: carnes rojas, espinaca, lentejas.','Hidratos complejos para sostener la energía.','Más agua y menos sal para reducir retención.'],
+    eje: ['Descanso activo: yoga o caminata suave.','Escuchá tu cuerpo, no te exijas.','Elongación y movilidad.']
+  },
+  folicular: {
+    ali: ['Buena fase para variedad de alimentos.','Proteína y vegetales frescos.','El cuerpo aprovecha bien los nutrientes ahora.'],
+    eje: ['Energía subiendo — buenos entrenamientos.','Fuerza progresiva, cardio moderado.','Aprovechá para retomar rutinas.']
+  },
+  ovulacion: {
+    ali: ['Máxima energía — comé variado y nutritivo.','Menos necesidad de antojos.','Antioxidantes: frutas y verduras de colores.'],
+    eje: ['Tu mejor semana para entrenar fuerte.','Alta intensidad, fuerza máxima.','Aprovechá este pico de energía.']
+  },
+  lutea: {
+    ali: ['El cuerpo pide más calorías — es normal.','Hidratos complejos para calmar el antojo de dulce.','Merienda proteica para no llegar con hambre a la cena.'],
+    eje: ['Energía bajando gradualmente.','Fuerza moderada, yoga, pilates.','Los últimos días priorizá descanso.']
+  }
+};
 
-function save() { localStorage.setItem('ciclo_v3', JSON.stringify(logs)); }
-function savePesos() { localStorage.setItem('ciclo_pesos', JSON.stringify(pesos)); }
-
-function getDay(date) {
-  var d = date || new Date();
-  var start = new Date(Y,M,D);
-  var today = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  var diff = Math.round((today - start) / 86400000);
-  return ((diff%28)+28)%28+1;
+function selectType(t) {
+  obType = t;
+  document.getElementById('ob-ac').style.display = t==='ac' ? 'block' : 'none';
+  document.getElementById('ob-natural').style.display = t==='natural' ? 'block' : 'none';
+  document.getElementById('type-ac').className = 'type-btn' + (t==='ac' ? ' sel' : '');
+  document.getElementById('type-natural').className = 'type-btn' + (t==='natural' ? ' sel' : '');
 }
 
-function getFase(day) {
-  if (day<=4)  return {cls:'p',  color:'#633806',bg:'#FAEEDA',fase:'descenso',    label:'Descenso · placebo'};
-  if (day<=10) return {cls:'f1', color:'#633806',bg:'#FAEEDA',fase:'recuperacion',label:'Recuperación · días 5–10'};
-  if (day<=18) return {cls:'f2', color:'#27500A',bg:'#EAF3DE',fase:'pico',        label:'Pico de energía · días 11–18'};
-  if (day<=24) return {cls:'f3', color:'#085041',bg:'#E1F5EE',fase:'bajando',     label:'Estabilidad bajando · días 19–24'};
-  return            {cls:'f4', color:'#72243E',bg:'#FBEAF0',fase:'descenso',    label:'Descenso · días 25–28'};
+function selectFmt(f) {
+  obFmt = f;
+  ['2404','2107','2800'].forEach(function(id){ document.getElementById('fmt-'+id).className='check-btn'; });
+  var map={'24+4':'2404','21+7':'2107','28+0':'2800'};
+  document.getElementById('fmt-'+map[f]).className='check-btn sel';
+}
+
+function guardarPerfil() {
+  var nombre = (document.getElementById('ob-nombre').value||'').trim();
+  if(!nombre) { alert('Ingresá tu nombre'); return; }
+  if(!obType) { alert('Elegí si tomás anticonceptivos o no'); return; }
+
+  var p = { nombre: nombre, tipo: obType };
+
+  if(obType==='ac') {
+    var inicio = document.getElementById('ob-inicio').value;
+    if(!inicio) { alert('Ingresá la fecha de inicio del blíster'); return; }
+    var parts = inicio.split('-');
+    p.bY = parseInt(parts[0]); p.bM = parseInt(parts[1])-1; p.bD = parseInt(parts[2]);
+    p.fmt = obFmt;
+    var fmtParts = obFmt.split('+');
+    p.activos = parseInt(fmtParts[0]);
+    p.placebos = parseInt(fmtParts[1]||0);
+    p.total = p.activos + p.placebos;
+  } else {
+    var ultima = document.getElementById('ob-ultima').value;
+    if(!ultima) { alert('Ingresá la fecha de tu última menstruación'); return; }
+    var dur = parseInt(document.getElementById('ob-duracion').value)||28;
+    var parts2 = ultima.split('-');
+    p.uY = parseInt(parts2[0]); p.uM = parseInt(parts2[1])-1; p.uD = parseInt(parts2[2]);
+    p.duracion = dur;
+  }
+
+  perfil = p;
+  localStorage.setItem('ciclo_perfil', JSON.stringify(perfil));
+  mostrarApp();
+}
+
+function getFaseAC(day) {
+  var act = perfil.activos;
+  var tot = perfil.total;
+  var plac = perfil.placebos;
+  if(day > act) return {cls:'p', color:'#72243E', bg:'#FBEAF0', fase:'descenso', label:'Descenso · placebo'};
+  var pct = day/act;
+  if(pct <= 0.25) return {cls:'f1', color:'#633806', bg:'#FAEEDA', fase:'recuperacion', label:'Recuperación · primeros días activos'};
+  if(pct <= 0.65) return {cls:'f2', color:'#27500A', bg:'#EAF3DE', fase:'pico',          label:'Pico de energía'};
+  if(pct <= 0.85) return {cls:'f3', color:'#085041', bg:'#E1F5EE', fase:'bajando',       label:'Estabilidad bajando'};
+  return               {cls:'f4', color:'#72243E', bg:'#FBEAF0', fase:'descenso',      label:'Descenso · últimos activos'};
+}
+
+function getDayAC() {
+  var start = new Date(perfil.bY, perfil.bM, perfil.bD);
+  var today = new Date(); today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  var diff = Math.round((today-start)/86400000);
+  return ((diff % perfil.total) + perfil.total) % perfil.total + 1;
+}
+
+function getDayACForDate(date) {
+  var start = new Date(perfil.bY, perfil.bM, perfil.bD);
+  var d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  var diff = Math.round((d-start)/86400000);
+  return ((diff % perfil.total) + perfil.total) % perfil.total + 1;
+}
+
+function getFaseNat(date) {
+  var start = new Date(perfil.uY, perfil.uM, perfil.uD);
+  var d = new Date(date||new Date());
+  d = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  var diff = Math.round((d-start)/86400000);
+  var cycleDay = ((diff % perfil.duracion) + perfil.duracion) % perfil.duracion + 1;
+  var dur = perfil.duracion;
+  var ovDay = Math.round(dur/2) - 2;
+
+  if(cycleDay <= 5)       return {cycleDay:cycleDay, cls:'n1', color:'#72243E', bg:'#FBEAF0', fase:'menstrual',  label:'Menstruación · días 1–5'};
+  if(cycleDay <= ovDay)   return {cycleDay:cycleDay, cls:'n2', color:'#633806', bg:'#FAEEDA', fase:'folicular',  label:'Fase folicular · días 6–'+ovDay};
+  if(cycleDay <= ovDay+3) return {cycleDay:cycleDay, cls:'n3', color:'#27500A', bg:'#EAF3DE', fase:'ovulacion',  label:'Ovulación · días '+(ovDay)+'-'+(ovDay+3)};
+  return                         {cycleDay:cycleDay, cls:'n4', color:'#085041', bg:'#E1F5EE', fase:'lutea',      label:'Fase lútea · día '+(ovDay+4)+' a '+dur};
+}
+
+function getCurrentFase() {
+  if(perfil.tipo==='ac') {
+    var day = getDayAC();
+    return getFaseAC(day);
+  } else {
+    return getFaseNat(new Date());
+  }
+}
+
+function getCurrentDay() {
+  if(perfil.tipo==='ac') return getDayAC();
+  return getFaseNat(new Date()).cycleDay;
+}
+
+function getTips(fase) {
+  if(perfil.tipo==='ac') return TIPS_AC[fase];
+  return TIPS_NAT[fase];
 }
 
 function todayKey() {
@@ -136,10 +297,9 @@ function todayKey() {
   return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');
 }
 
-function setStatus(msg) {
-  var el=document.getElementById('status-bar');
-  if(el) el.textContent=msg;
-}
+function save() { localStorage.setItem('ciclo_v3', JSON.stringify(logs)); }
+function savePesos() { localStorage.setItem('ciclo_pesos', JSON.stringify(pesos)); }
+function setStatus(msg) { var el=document.getElementById('status-bar'); if(el) el.textContent=msg; }
 
 function pickScore(type,val) {
   var key=todayKey();
@@ -155,7 +315,7 @@ function saveLog() {
   var n=document.getElementById('nota-input');
   if(n) logs[key].nota=n.value;
   save();
-  setStatus('Guardado');
+  setStatus('Guardado ✓');
   setTimeout(function(){setStatus('Guardado local');},1500);
 }
 
@@ -169,24 +329,17 @@ function saveComidas() {
   var hidEl=document.getElementById('hidratos-sel');
   if(hidEl) logs[key].hidratos=hidEl.dataset.val;
   save();
-  setStatus('Comidas guardadas');
+  setStatus('Comidas guardadas ✓');
   setTimeout(function(){setStatus('Guardado local');},1500);
 }
 
 function toggleHidratos(val) {
   var el=document.getElementById('hidratos-sel');
   if(!el) return;
-  var cur=el.dataset.val;
-  el.dataset.val = cur===val ? '' : val;
-  renderHidratosBtns();
-}
-
-function renderHidratosBtns() {
-  var el=document.getElementById('hidratos-sel');
-  var val=el?el.dataset.val:'';
-  ['almuerzo','cena'].forEach(function(op){
+  el.dataset.val = el.dataset.val===val ? '' : val;
+  ['almuerzo','cena','ninguna'].forEach(function(op){
     var btn=document.getElementById('hid-btn-'+op);
-    if(btn) btn.className='check-btn'+(val===op?' sel':'');
+    if(btn) btn.className='check-btn'+(el.dataset.val===op?' sel':'');
   });
 }
 
@@ -195,12 +348,12 @@ function saveEjercicio() {
   if(!logs[key]) logs[key]={};
   var tipo=document.getElementById('eje-tipo');
   var dur=document.getElementById('eje-dur');
-  var int=document.getElementById('eje-int');
+  var intEl=document.getElementById('int-sel');
   if(tipo) logs[key].ejeTipo=tipo.value;
   if(dur) logs[key].ejeDur=dur.value;
-  if(int) logs[key].ejeInt=int.dataset.val;
+  if(intEl) logs[key].ejeInt=intEl.dataset.val;
   save();
-  setStatus('Ejercicio guardado');
+  setStatus('Ejercicio guardado ✓');
   setTimeout(function(){setStatus('Guardado local');},1500);
 }
 
@@ -220,6 +373,7 @@ function addPeso() {
   var val=parseFloat(el.value);
   if(isNaN(val)) return;
   var key=todayKey();
+  pesos = pesos.filter(function(p){return p.fecha!==key;});
   pesos.push({fecha:key,peso:val});
   pesos.sort(function(a,b){return a.fecha.localeCompare(b.fecha);});
   savePesos();
@@ -228,14 +382,13 @@ function addPeso() {
 }
 
 function exportar() {
-  var lines = ['REGISTRO MI CICLO — ROMINA VALLE\n'];
-  lines.push('=== BIENESTAR ===');
+  var lines=['REGISTRO MI CICLO — '+perfil.nombre.toUpperCase()+'\n'];
   var bKeys=Object.keys(logs).sort().reverse().slice(0,28);
   bKeys.forEach(function(k){
     var l=logs[k];
     var d=new Date(k+'T12:00:00');
-    var day=getDay(d);
-    var fi=getFase(day);
+    var fi = perfil.tipo==='ac' ? getFaseAC(getDayACForDate(d)) : getFaseNat(d);
+    var day = perfil.tipo==='ac' ? getDayACForDate(d) : fi.cycleDay;
     var dateStr=d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
     lines.push('\n'+dateStr+' (Día '+day+' — '+fi.label+')');
     if(l.energy||l.antojo||l.mood) lines.push('  Energía: '+(l.energy||'-')+'/5 | Antojo: '+(l.antojo||'-')+'/5 | Ánimo: '+(l.mood||'-')+'/5');
@@ -243,32 +396,40 @@ function exportar() {
     if(l.merienda) lines.push('  Merienda: '+l.merienda);
     if(l.cena) lines.push('  Cena: '+l.cena);
     if(l.hidratos) lines.push('  Hidratos en: '+l.hidratos);
-    if(l.ejeTipo) lines.push('  Ejercicio: '+l.ejeTipo+(l.ejeDur?' — '+l.ejeDur+' min':'')+(l.ejeInt?' — intensidad: '+l.ejeInt:''));
+    if(l.ejeTipo) lines.push('  Ejercicio: '+l.ejeTipo+(l.ejeDur?' — '+l.ejeDur+' min':'')+(l.ejeInt?' — '+l.ejeInt:''));
     if(l.nota) lines.push('  Nota: '+l.nota);
   });
-  if(pesos.length) {
+  if(pesos.length){
     lines.push('\n=== PESO ===');
     pesos.slice().reverse().forEach(function(p){
       var d=new Date(p.fecha+'T12:00:00');
-      lines.push(d.toLocaleDateString('es-AR',{day:'numeric',month:'long',year:'numeric'})+': '+p.peso+' kg');
+      lines.push(d.toLocaleDateString('es-AR',{day:'numeric',month:'long'})+': '+p.peso+' kg');
     });
   }
   var blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');
-  a.href=url; a.download='registro_romina.txt';
+  a.href=url; a.download='registro_'+perfil.nombre.toLowerCase()+'.txt';
   document.body.appendChild(a); a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
 
+function resetPerfil() {
+  if(!confirm('¿Borrar tu perfil y empezar de nuevo?')) return;
+  localStorage.removeItem('ciclo_perfil');
+  localStorage.removeItem('ciclo_v3');
+  localStorage.removeItem('ciclo_pesos');
+  location.reload();
+}
+
 function renderHoy() {
-  var day=getDay();
-  var fi=getFase(day);
-  var tips=TIPS[fi.fase];
+  var day=getCurrentDay();
+  var fi=getCurrentFase();
+  var tips=getTips(fi.fase);
   var key=todayKey();
   var ex=logs[key]||{};
-  var daysLeft=29-day;
+  var daysLeft = perfil.tipo==='ac' ? (perfil.total - day + 1) : (perfil.duracion - fi.cycleDay + 1);
   document.getElementById('topbar-sub').textContent='Día '+day+' · '+fi.label.split('·')[0].trim();
 
   function scoreRow(type) {
@@ -284,7 +445,7 @@ function renderHoy() {
     '<div class="fase-card" style="background:'+fi.bg+';">'
     +'<div style="font-size:28px;font-weight:800;color:'+fi.color+';">Día '+day+'</div>'
     +'<div style="font-size:13px;font-weight:600;color:'+fi.color+';margin-top:2px;">'+fi.label+'</div>'
-    +'<div style="font-size:12px;color:'+fi.color+';opacity:0.7;margin-top:2px;">'+daysLeft+' días para el próximo blíster</div>'
+    +'<div style="font-size:12px;color:'+fi.color+';opacity:0.7;margin-top:2px;">'+daysLeft+' días para el próximo ciclo</div>'
     +'</div>'
     +'<div class="card">'
     +'<div class="section-title">Alimentación hoy</div>'
@@ -304,61 +465,47 @@ function renderHoy() {
 }
 
 function renderComidas() {
-  var key=todayKey();
-  var ex=logs[key]||{};
-  var hid=ex.hidratos||'';
+  var key=todayKey(); var ex=logs[key]||{}; var hid=ex.hidratos||'';
   document.getElementById('screen-comidas').innerHTML=
-    '<div class="card">'
-    +'<div class="section-title">Comidas de hoy</div>'
-    +'<div class="lbl">Almuerzo</div>'
-    +'<textarea id="txt-almuerzo" rows="2" placeholder="Ej: pollo a la plancha, ensalada, arroz integral">'+(ex.almuerzo||'')+'</textarea>'
-    +'<div class="lbl">Merienda</div>'
-    +'<textarea id="txt-merienda" rows="2" placeholder="Ej: yogur griego con fruta">'+(ex.merienda||'')+'</textarea>'
-    +'<div class="lbl">Cena</div>'
-    +'<textarea id="txt-cena" rows="2" placeholder="Ej: merluza al horno, vegetales salteados">'+(ex.cena||'')+'</textarea>'
-    +'<div class="lbl">¿En qué comida pusiste los hidratos?</div>'
+    '<div class="card"><div class="section-title">Comidas de hoy</div>'
+    +'<div class="lbl">Almuerzo</div><textarea id="txt-almuerzo" rows="2" placeholder="Ej: pollo, ensalada, arroz integral">'+(ex.almuerzo||'')+'</textarea>'
+    +'<div class="lbl">Merienda</div><textarea id="txt-merienda" rows="2" placeholder="Ej: yogur griego con fruta">'+(ex.merienda||'')+'</textarea>'
+    +'<div class="lbl">Cena</div><textarea id="txt-cena" rows="2" placeholder="Ej: merluza al horno, vegetales">'+(ex.cena||'')+'</textarea>'
+    +'<div class="lbl">¿Dónde pusiste los hidratos?</div>'
     +'<div class="check-row" id="hidratos-sel" data-val="'+hid+'">'
     +'<a href="javascript:void(0)" class="check-btn'+(hid==='almuerzo'?' sel':'')+'" id="hid-btn-almuerzo" onclick="toggleHidratos(\'almuerzo\');return false;">Almuerzo</a>'
     +'<a href="javascript:void(0)" class="check-btn'+(hid==='cena'?' sel':'')+'" id="hid-btn-cena" onclick="toggleHidratos(\'cena\');return false;">Cena</a>'
     +'<a href="javascript:void(0)" class="check-btn'+(hid==='ninguna'?' sel':'')+'" id="hid-btn-ninguna" onclick="toggleHidratos(\'ninguna\');return false;">No puse</a>'
     +'</div>'
-    +'<a href="javascript:void(0)" class="save-btn" onclick="saveComidas();return false;">Guardar comidas</a>'
-    +'</div>';
+    +'<a href="javascript:void(0)" class="save-btn" onclick="saveComidas();return false;">Guardar comidas</a></div>';
 }
 
 function renderEjercicio() {
-  var key=todayKey();
-  var ex=logs[key]||{};
-  var int=ex.ejeInt||'';
+  var key=todayKey(); var ex=logs[key]||{}; var int=ex.ejeInt||'';
   document.getElementById('screen-ejercicio').innerHTML=
-    '<div class="card">'
-    +'<div class="section-title">Ejercicio de hoy</div>'
-    +'<div class="lbl">Tipo de ejercicio</div>'
-    +'<input type="text" id="eje-tipo" placeholder="Ej: gym, caminata, yoga, pilates" value="'+(ex.ejeTipo||'')+'"/>'
-    +'<div class="lbl">Duración (minutos)</div>'
-    +'<input type="number" id="eje-dur" placeholder="Ej: 45" value="'+(ex.ejeDur||'')+'"/>'
+    '<div class="card"><div class="section-title">Ejercicio de hoy</div>'
+    +'<div class="lbl">Tipo de ejercicio</div><input type="text" id="eje-tipo" placeholder="Ej: gym, caminata, yoga" value="'+(ex.ejeTipo||'')+'"/>'
+    +'<div class="lbl">Duración (minutos)</div><input type="number" id="eje-dur" placeholder="Ej: 45" value="'+(ex.ejeDur||'')+'"/>'
     +'<div class="lbl">Intensidad</div>'
     +'<div class="check-row" id="int-sel" data-val="'+int+'">'
     +'<a href="javascript:void(0)" class="check-btn'+(int==='suave'?' sel':'')+'" id="int-btn-suave" onclick="toggleInt(\'suave\');return false;">Suave</a>'
     +'<a href="javascript:void(0)" class="check-btn'+(int==='moderada'?' sel':'')+'" id="int-btn-moderada" onclick="toggleInt(\'moderada\');return false;">Moderada</a>'
     +'<a href="javascript:void(0)" class="check-btn'+(int==='intensa'?' sel':'')+'" id="int-btn-intensa" onclick="toggleInt(\'intensa\');return false;">Intensa</a>'
     +'</div>'
-    +'<a href="javascript:void(0)" class="save-btn" onclick="saveEjercicio();return false;">Guardar ejercicio</a>'
-    +'</div>';
+    +'<a href="javascript:void(0)" class="save-btn" onclick="saveEjercicio();return false;">Guardar ejercicio</a></div>';
 }
 
 function renderPeso() {
   var ultimos=pesos.slice().reverse().slice(0,10);
   var pesoHtml='';
-  if(ultimos.length) {
-    pesoHtml='<div class="peso-hist">';
+  if(ultimos.length){
+    pesoHtml='<div style="margin-top:10px;">';
     ultimos.forEach(function(p){
       var d=new Date(p.fecha+'T12:00:00');
-      var dateStr=d.toLocaleDateString('es-AR',{day:'numeric',month:'short'});
-      pesoHtml+='<div class="peso-item"><span>'+dateStr+'</span><strong>'+p.peso+' kg</strong></div>';
+      pesoHtml+='<div class="peso-item"><span style="color:#aaa;">'+d.toLocaleDateString('es-AR',{day:'numeric',month:'short'})+'</span><strong>'+p.peso+' kg</strong></div>';
     });
-    if(pesos.length>=2) {
-      var diff=(pesos[pesos.length-1].peso - pesos[0].peso).toFixed(1);
+    if(pesos.length>=2){
+      var diff=(pesos[pesos.length-1].peso-pesos[0].peso).toFixed(1);
       var color=diff<0?'#27500A':'#993C1D';
       var sign=diff>0?'+':'';
       pesoHtml+='<div style="margin-top:10px;font-size:13px;color:'+color+';font-weight:600;">Diferencia total: '+sign+diff+' kg</div>';
@@ -366,46 +513,41 @@ function renderPeso() {
     pesoHtml+='</div>';
   }
   document.getElementById('screen-peso').innerHTML=
-    '<div class="card">'
-    +'<div class="section-title">Registro de peso</div>'
+    '<div class="card"><div class="section-title">Registro de peso</div>'
     +'<div class="lbl">Peso de hoy (kg)</div>'
-    +'<div class="peso-row">'
-    +'<input type="number" id="peso-input" placeholder="Ej: 77.5" step="0.1"/>'
-    +'<a href="javascript:void(0)" class="peso-add-btn" onclick="addPeso();return false;">Agregar</a>'
-    +'</div>'
-    +pesoHtml
-    +'</div>'
-    +'<div class="card">'
-    +'<div class="section-title">Exportar para Virginia</div>'
-    +'<div style="font-size:13px;color:#888;margin-bottom:8px;">Descargá un archivo de texto con todos tus registros de las últimas 4 semanas para llevarle a la nutricionista.</div>'
-    +'<a href="javascript:void(0)" class="export-btn" onclick="exportar();return false;">Descargar registro</a>'
-    +'</div>';
+    +'<div class="peso-row"><input type="number" id="peso-input" placeholder="Ej: 77.5" step="0.1"/>'
+    +'<a href="javascript:void(0)" class="peso-add-btn" onclick="addPeso();return false;">Agregar</a></div>'
+    +pesoHtml+'</div>'
+    +'<div class="card"><div class="section-title">Exportar para tu nutricionista</div>'
+    +'<div style="font-size:13px;color:#888;margin-bottom:8px;">Descargá un archivo con todos tus registros de las últimas 4 semanas.</div>'
+    +'<a href="javascript:void(0)" class="export-btn" onclick="exportar();return false;">Descargar registro</a></div>'
+    +'<div class="card"><div class="section-title">Configuración</div>'
+    +'<div style="font-size:13px;color:#888;margin-bottom:4px;">Perfil: '+perfil.nombre+(perfil.tipo==='ac'?' · Anticonceptivo '+perfil.fmt:' · Ciclo natural '+perfil.duracion+' días')+'</div>'
+    +'<a href="javascript:void(0)" class="danger-btn" onclick="resetPerfil();return false;">Resetear perfil</a></div>';
 }
 
 function renderCiclo() {
-  var day=getDay();
-  var html='<div class="card">'
-    +'<div class="section-title">Tu blíster actual</div>'
-    +'<div style="font-size:12px;color:#888;margin-bottom:10px;">Iniciado el 26 de abril · Hoy día '+day+'</div>'
+  var day=getCurrentDay();
+  var total = perfil.tipo==='ac' ? perfil.total : perfil.duracion;
+  var html='<div class="card"><div class="section-title">Tu ciclo actual</div>'
+    +'<div style="font-size:12px;color:#888;margin-bottom:10px;">Hoy día '+day+' de '+total+'</div>'
     +'<div class="pill-grid">';
-  for(var d=1;d<=28;d++){
-    var fi=getFase(d);
-    var start=new Date(Y,M,D);
+  for(var d=1;d<=total;d++){
+    var fi;
+    if(perfil.tipo==='ac') {
+      fi=getFaseAC(d);
+    } else {
+      var fakeDate=new Date(perfil.uY,perfil.uM,perfil.uD);
+      fakeDate.setDate(fakeDate.getDate()+d-1);
+      fi=getFaseNat(fakeDate);
+    }
+    var start = perfil.tipo==='ac' ? new Date(perfil.bY,perfil.bM,perfil.bD) : new Date(perfil.uY,perfil.uM,perfil.uD);
     start.setDate(start.getDate()+d-1);
     var k=start.getFullYear()+'-'+String(start.getMonth()+1).padStart(2,'0')+'-'+String(start.getDate()).padStart(2,'0');
     var hasLog=!!(logs[k]&&(logs[k].energy||logs[k].almuerzo||logs[k].ejeTipo));
     html+='<div class="pill '+fi.cls+(d==day?' today':'')+(hasLog?' has-log':'')+'" style="position:relative;">'+d+'</div>';
   }
-  html+='</div>'
-    +'<div style="font-size:11px;color:#aaa;margin-top:8px;">Borde grueso = hoy · Punto = tiene registro</div>'
-    +'</div>'
-    +'<div class="card">'
-    +'<div style="font-size:11px;color:#888;display:flex;flex-wrap:wrap;gap:8px;">'
-    +'<span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:50%;background:#FAEEDA;border:1px solid #EF9F27;display:inline-block;"></span>Recuperación</span>'
-    +'<span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:50%;background:#EAF3DE;border:1px solid #97C459;display:inline-block;"></span>Pico</span>'
-    +'<span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:50%;background:#E1F5EE;border:1px solid #5DCAA5;display:inline-block;"></span>Bajando</span>'
-    +'<span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:50%;background:#FBEAF0;border:1px solid #ED93B1;display:inline-block;"></span>Descenso</span>'
-    +'</div></div>';
+  html+='</div><div style="font-size:11px;color:#aaa;margin-top:8px;">Borde grueso = hoy · Punto = tiene registro</div></div>';
   document.getElementById('screen-ciclo').innerHTML=html;
 }
 
@@ -417,19 +559,19 @@ function renderHistorial() {
   } else {
     html+='<div class="section-title">Historial</div>';
     entries.forEach(function(e){
-      var key=e[0];var log=e[1];
+      var key=e[0]; var log=e[1];
       var d=new Date(key+'T12:00:00');
-      var day=getDay(d);
-      var fi=getFase(day);
+      var fi = perfil.tipo==='ac' ? getFaseAC(getDayACForDate(d)) : getFaseNat(d);
+      var day = perfil.tipo==='ac' ? getDayACForDate(d) : fi.cycleDay;
       var dateStr=d.toLocaleDateString('es-AR',{weekday:'short',day:'numeric',month:'short'});
       html+='<div class="log-row">'
         +'<div><span class="log-date">'+dateStr+'</span>'
         +'<span class="log-fase" style="background:'+fi.bg+';color:'+fi.color+';">Día '+day+'</span></div>'
         +'<div class="log-scores">';
-      if(log.energy||log.antojo||log.mood) html+='<span>E:'+( log.energy||'—')+'</span><span>A:'+(log.antojo||'—')+'</span><span>Á:'+(log.mood||'—')+'</span>';
+      if(log.energy||log.antojo||log.mood) html+='<span>E:'+(log.energy||'—')+'</span><span>A:'+(log.antojo||'—')+'</span><span>Á:'+(log.mood||'—')+'</span>';
       if(log.ejeTipo) html+='<span>'+log.ejeTipo+(log.ejeDur?' '+log.ejeDur+'min':'')+'</span>';
       html+='</div>';
-      if(log.almuerzo) html+='<div class="log-nota">Alm: '+log.almuerzo.slice(0,40)+'</div>';
+      if(log.almuerzo) html+='<div class="log-nota">Alm: '+log.almuerzo.slice(0,50)+'</div>';
       if(log.nota) html+='<div class="log-nota">'+log.nota.slice(0,60)+'</div>';
       html+='</div>';
     });
@@ -452,9 +594,19 @@ function setScreen(s) {
   if(s==='hist') renderHistorial();
 }
 
-renderHoy();
-renderCiclo();
-renderHistorial();
+function mostrarApp() {
+  document.getElementById('app-onboard').style.display='none';
+  document.getElementById('app-topbar').style.display='block';
+  document.getElementById('app-content').style.display='block';
+  document.getElementById('topbar-title').textContent='Hola, '+perfil.nombre;
+  renderHoy();
+  renderCiclo();
+  renderHistorial();
+}
+
+if(perfil) {
+  mostrarApp();
+}
 </script>
 </body>
 </html>
