@@ -471,8 +471,11 @@ function renderComidas() {
   var key=todayKey(); var ex=logs[key]||{}; var hid=ex.hidratos||'';
   document.getElementById('screen-comidas').innerHTML=
     '<div class="card"><div class="section-title">Comidas de hoy</div>'
+    +'<div class="lbl">Desayuno</div><textarea id="txt-desayuno" rows="2" placeholder="Ej: mate + tostada integral con queso">'+(ex.desayuno||'')+'</textarea>'
+    +'<div class="lbl">Colación mañana</div><textarea id="txt-colacion1" rows="1" placeholder="Ej: frutos secos, manzana">'+(ex.colacion1||'')+'</textarea>'
     +'<div class="lbl">Almuerzo</div><textarea id="txt-almuerzo" rows="2" placeholder="Ej: pollo, ensalada, arroz integral">'+(ex.almuerzo||'')+'</textarea>'
     +'<div class="lbl">Merienda</div><textarea id="txt-merienda" rows="2" placeholder="Ej: yogur griego con fruta">'+(ex.merienda||'')+'</textarea>'
+    +'<div class="lbl">Colación tarde</div><textarea id="txt-colacion2" rows="1" placeholder="Ej: huevo duro, frutos secos">'+(ex.colacion2||'')+'</textarea>'
     +'<div class="lbl">Cena</div><textarea id="txt-cena" rows="2" placeholder="Ej: merluza al horno, vegetales">'+(ex.cena||'')+'</textarea>'
     +'<div class="lbl">¿Dónde pusiste los hidratos?</div>'
     +'<div class="check-row" id="hidratos-sel" data-val="'+hid+'">'
