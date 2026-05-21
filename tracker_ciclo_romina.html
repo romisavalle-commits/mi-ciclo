@@ -322,7 +322,7 @@ function saveLog() {
 function saveComidas() {
   var key=todayKey();
   if(!logs[key]) logs[key]={};
-  ['almuerzo','merienda','cena'].forEach(function(t){
+  ['desayuno','colacion1','almuerzo','merienda','colacion2','cena'].forEach(function(t){
     var el=document.getElementById('txt-'+t);
     if(el) logs[key][t]=el.value;
   });
@@ -392,8 +392,11 @@ function exportar() {
     var dateStr=d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
     lines.push('\n'+dateStr+' (Día '+day+' — '+fi.label+')');
     if(l.energy||l.antojo||l.mood) lines.push('  Energía: '+(l.energy||'-')+'/5 | Antojo: '+(l.antojo||'-')+'/5 | Ánimo: '+(l.mood||'-')+'/5');
+    if(l.desayuno) lines.push('  Desayuno: '+l.desayuno);
+    if(l.colacion1) lines.push('  Colación mañana: '+l.colacion1);
     if(l.almuerzo) lines.push('  Almuerzo: '+l.almuerzo);
     if(l.merienda) lines.push('  Merienda: '+l.merienda);
+    if(l.colacion2) lines.push('  Colación tarde: '+l.colacion2);
     if(l.cena) lines.push('  Cena: '+l.cena);
     if(l.hidratos) lines.push('  Hidratos en: '+l.hidratos);
     if(l.ejeTipo) lines.push('  Ejercicio: '+l.ejeTipo+(l.ejeDur?' — '+l.ejeDur+' min':'')+(l.ejeInt?' — '+l.ejeInt:''));
@@ -571,7 +574,8 @@ function renderHistorial() {
       if(log.energy||log.antojo||log.mood) html+='<span>E:'+(log.energy||'—')+'</span><span>A:'+(log.antojo||'—')+'</span><span>Á:'+(log.mood||'—')+'</span>';
       if(log.ejeTipo) html+='<span>'+log.ejeTipo+(log.ejeDur?' '+log.ejeDur+'min':'')+'</span>';
       html+='</div>';
-      if(log.almuerzo) html+='<div class="log-nota">Alm: '+log.almuerzo.slice(0,50)+'</div>';
+      if(log.desayuno) html+='<div class="log-nota">Desay: '+log.desayuno.slice(0,40)+'</div>';
+      if(log.almuerzo) html+='<div class="log-nota">Alm: '+log.almuerzo.slice(0,40)+'</div>';
       if(log.nota) html+='<div class="log-nota">'+log.nota.slice(0,60)+'</div>';
       html+='</div>';
     });
